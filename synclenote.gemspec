@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.email         = ["yuya@j96.org"]
   spec.summary       = %q{TODO: Write a short summary. Required.}
   spec.description   = %q{TODO: Write a longer description. Optional.}
-  spec.homepage      = ""
+  spec.homepage      = "https://github.com/nishidayuya/" + spec.name
   spec.license       = "X11"
 
   spec.files         = `git ls-files -z`.split("\x0")
