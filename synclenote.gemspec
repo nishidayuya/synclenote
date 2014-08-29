@@ -8,7 +8,8 @@ Gem::Specification.new do |spec|
   spec.version       = Synclenote::VERSION
   spec.authors       = ["Yuya.Nishida."]
   spec.email         = ["yuya@j96.org"]
-  spec.summary       = %q{TODO: Write a short summary. Required.}
+  spec.summary       = File.readlines(File.join(__dir__, "README.md"))
+    .reject { |l| /\A\s*\z|\A\#/ === l }.first.chomp
   spec.description   = %q{TODO: Write a longer description. Optional.}
   spec.homepage      = "https://github.com/nishidayuya/" + spec.name
   spec.license       = "X11"
