@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.email         = ["yuya@j96.org"]
   spec.summary       = File.readlines(File.join(__dir__, "README.md"))
     .reject { |l| /\A\s*\z|\A\#/ === l }.first.chomp
-  spec.description   = %q{TODO: Write a longer description. Optional.}
+  spec.description   = spec.summary
   spec.homepage      = "https://github.com/nishidayuya/" + spec.name
   spec.license       = "X11"
 
