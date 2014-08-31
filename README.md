@@ -1,6 +1,6 @@
 # Synclenote
 
-TODO: Write a gem description
+A synchronization tool for GFM (GitHub Flavored Markdown) files and Evernote.
 
 [![License X11](https://img.shields.io/badge/license-X11-brightgreen.svg)](https://raw.githubusercontent.com/nishidayuya/synclenote/master/LICENSE.txt)
 
