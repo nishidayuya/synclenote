@@ -16,7 +16,15 @@ $ bundle
 
 ## Usage
 
-TODO: Write usage instructions here
+1. Create configuration directory.
+```sh
+$ synclenote init
+```
+2. Open "~/.synclenote/config" by your favorite text editor and edit "TODO:" section.
+3. Sync your GFM files and Evernote.
+```sh
+$ synclenote sync
+```
 
 ## Contributing
 
