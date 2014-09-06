@@ -1,26 +1,30 @@
 # Synclenote
 
-TODO: Write a gem description
+A synchronization tool for GFM (GitHub Flavored Markdown) files and Evernote.
 
 [![License X11](https://img.shields.io/badge/license-X11-brightgreen.svg)](https://raw.githubusercontent.com/nishidayuya/synclenote/master/LICENSE.txt)
 
 ## Installation
 
-Add this line to your application's Gemfile:
-
-    gem 'synclenote'
-
-And then execute:
-
-    $ bundle
-
-Or install it yourself as:
-
-    $ gem install synclenote
+1. Install Ruby interpreter.
+2. Clone and install this software.
+```sh
+$ git clone https://github.com/nishidayuya/synclenote.git
+$ cd synclenote
+$ bundle
+```
 
 ## Usage
 
-TODO: Write usage instructions here
+1. Create configuration directory.
+```sh
+$ synclenote init
+```
+2. Open "~/.synclenote/config" by your favorite text editor and edit "TODO:" section.
+3. Sync your GFM files and Evernote.
+```sh
+$ synclenote sync
+```
 
 ## Contributing
 
