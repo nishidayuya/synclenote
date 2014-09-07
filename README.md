@@ -12,7 +12,7 @@ A synchronization tool for GFM (GitHub Flavored Markdown) files and Evernote.
 ```sh
 $ git clone https://github.com/nishidayuya/synclenote.git
 $ cd synclenote
-$ bundle
+$ bundle exec rake install
 ```
 
 ## Usage
