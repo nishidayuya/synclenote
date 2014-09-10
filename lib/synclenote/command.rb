@@ -47,7 +47,7 @@ Synclenote.configure(1) do |config|
 end
 EOS
     end
-    sync_statuses.mkpath
+    sync_statuses_path.mkpath
     last_sync_path.open("w") do |f|
       f.puts(YAML_HEADER)
       f.puts({last_sync_datetime: Time.at(0)}.to_yaml)
