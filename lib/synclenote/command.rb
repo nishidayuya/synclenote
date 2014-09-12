@@ -171,14 +171,22 @@ EOS
   end
 
   def create_note(note_path, options = {})
-    title, body = *note_path.open { |f|
-      [f.gets.chomp.sub(/\A# /, ""), f.read]
-    }
+    title = nil
+    tags = []
+    body = nil
+    note_path.open do |f|
+      title = f.gets.chomp.sub(/\A#\s*/, "")
+      if md = /\A(?<tags>(?:\[.*?\])+)(?:\s|\z)/.match(title)
+        tags = md[:tags].scan(/\[(.*?)\]/).flatten
+        title = md.post_match
+      end
+      body = f.read
+    end
     html = pipeline.call(body, gfm: true)[:output].to_s
     content = HEADER +
       html.gsub(/ class=\".*?\"/, "").gsub(/<(br|hr).*?>/, "\\&</\\1>") +
       FOOTER
-    o = options.merge(title: title, content: content)
+    o = options.merge(title: title, content: content, tagNames: tags)
     return Evernote::EDAM::Type::Note.new(o)
   end
 
