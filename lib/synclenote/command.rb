@@ -205,7 +205,8 @@ EOS
 
   def create_remote_note(token, note_store, note_path, note_sync_status_path)
     logger.debug("doing createNote: %s" % note_path)
-    created_note = note_store.createNote(token, create_note(note_path))
+    new_note = create_note(note_path)
+    created_note = note_store.createNote(token, new_note)
     logger.debug("done createNote.")
     create_note_sync_status_file(note_sync_status_path, created_note,
                                  Time.now)
@@ -215,8 +216,8 @@ EOS
   def update_remote_note(token, note_store, note_path, note_sync_status_path,
                          guid)
     logger.debug("doing updateNote: %s %s" % [note_path, guid])
-    updated_note = note_store.updateNote(token, create_note(note_path,
-                                                            guid: guid))
+    new_note = create_note(note_path, guid: guid)
+    updated_note = note_store.updateNote(token, new_note)
     logger.debug("done updateNote.")
     create_note_sync_status_file(note_sync_status_path, updated_note, Time.now)
     logger.debug("created: %s" % note_sync_status_path)
