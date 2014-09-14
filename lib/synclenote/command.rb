@@ -190,6 +190,20 @@ EOS
     return Evernote::EDAM::Type::Note.new(o)
   end
 
+  def target_note?(note)
+    c = Synclenote::Configuration.data
+    if c.local.whitelist_tags
+      return note.tagNames.any? { |name|
+        c.local.whitelist_tags.include?(name)
+      }
+    elsif c.local.blacklist_tags
+      return !note.tagNames.any? { |name|
+        c.local.blacklist_tags.include?(name)
+      }
+    end
+    return true
+  end
+
   def create_note_sync_status_file(path, note, sync_datetime)
     Tempfile.open("synclenote") do |tmp_file|
       tmp_file.puts(YAML_HEADER)
@@ -204,8 +218,13 @@ EOS
   end
 
   def create_remote_note(token, note_store, note_path, note_sync_status_path)
-    logger.debug("doing createNote: %s" % note_path)
+    c = Synclenote::Configuration.data
     new_note = create_note(note_path)
+    if !target_note?(new_note)
+      logger.info("skip creating: %s" % note_path)
+      return
+    end
+    logger.debug("doing createNote: %s" % note_path)
     created_note = note_store.createNote(token, new_note)
     logger.debug("done createNote.")
     create_note_sync_status_file(note_sync_status_path, created_note,
@@ -215,8 +234,13 @@ EOS
 
   def update_remote_note(token, note_store, note_path, note_sync_status_path,
                          guid)
-    logger.debug("doing updateNote: %s %s" % [note_path, guid])
     new_note = create_note(note_path, guid: guid)
+    if !target_note?(new_note)
+      logger.info("skip updating: %s" % note_path)
+      remove_remote_note(token, note_store, note_sync_status_path)
+      return
+    end
+    logger.debug("doing updateNote: %s %s" % [note_path, guid])
     updated_note = note_store.updateNote(token, new_note)
     logger.debug("done updateNote.")
     create_note_sync_status_file(note_sync_status_path, updated_note, Time.now)
