@@ -172,12 +172,12 @@ EOS
 
   def create_note(note_path, options = {})
     title = nil
-    tags = []
+    tags = ["syncle"]
     body = nil
     note_path.open do |f|
       title = f.gets.chomp.sub(/\A#\s*/, "")
       if md = /\A(?<tags>(?:\[.*?\])+)(?:\s|\z)/.match(title)
-        tags = md[:tags].scan(/\[(.*?)\]/).flatten
+        tags += md[:tags].scan(/\[(.*?)\]/).flatten
         title = md.post_match
       end
       body = f.read
