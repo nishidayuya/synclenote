@@ -69,7 +69,8 @@ EOS
     logger.debug("loaded configuration file: %s" % config_path)
 
     logger.debug("invoking client.")
-    client = EvernoteOAuth::Client.new(token: token)
+    client = EvernoteOAuth::Client.new(token: token,
+                                       sandbox: !!c.remote.sandbox)
     logger.debug("invoked client.")
 
     logger.debug("invoking user_store.")
