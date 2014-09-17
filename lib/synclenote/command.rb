@@ -84,7 +84,7 @@ EOS
     note_store = client.note_store
     logger.debug("loaded note_store.")
 
-    local_top_path = Pathname(c.local.directory)
+    local_top_path = Pathname(c.local.directory).expand_path
     last_sync_status = YAML.load_file(last_sync_path)
     last_sync_datetime = last_sync_status[:last_sync_datetime]
     if Time.now - last_sync_datetime <= min_sync_interval
