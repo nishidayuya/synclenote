@@ -22,9 +22,9 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency "thor"
   spec.add_runtime_dependency "evernote_oauth"
   spec.add_runtime_dependency "html-pipeline"
-  spec.add_runtime_dependency "github-markdown" # for MarkdownFilter
-  spec.add_runtime_dependency "sanitize" # for SanitizationFilter
-  spec.add_runtime_dependency "github-linguist" # for SyntaxHighlightFilter
+  spec.add_runtime_dependency "github-markdown", "= 0.6.7" # for MarkdownFilter
+  spec.add_runtime_dependency "sanitize", "= 3.0.2" # for SanitizationFilter
+  spec.add_runtime_dependency "github-linguist", "= 3.1.5" # for SyntaxHighlightFilter
   spec.add_development_dependency "bundler", "~> 1.6"
   spec.add_development_dependency "rake"
   spec.add_development_dependency "guard-bundler"
