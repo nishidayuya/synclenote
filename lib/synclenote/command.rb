@@ -3,10 +3,11 @@ require "synclenote"
 require "yaml"
 require "pathname"
 require "logger"
+require "tempfile"
 
 require "thor"
 require "evernote_oauth"
-require "html/pipeline"
+require "redcarpet"
 
 class Synclenote::Command < Thor
   attr_accessor :logger
@@ -165,14 +166,23 @@ EOS
   end
 
   def build_html(markdown_text)
-    @pipeline ||=
-      ::HTML::Pipeline.new([
-                             ::HTML::Pipeline::MarkdownFilter,
-                             ::HTML::Pipeline::SanitizationFilter,
-                             ::HTML::Pipeline::SyntaxHighlightFilter,
-                             # ::HTML::Pipeline::PlainTextInputFilter,
-                           ])
-    html = @pipeline.call(markdown_text, gfm: true)[:output].to_s
+    @formatter ||= Redcarpet::Markdown.new(
+      Redcarpet::Render::HTML.new(
+        filter_html: true,
+        hard_wrap: true,
+      ),
+      underline: true,
+      lax_spacing: true,
+      footnotes: true,
+      no_intra_emphasis: true,
+      superscript: true,
+      strikethrough: true,
+      tables: true,
+      space_after_headers: true,
+      fenced_code_blocks: true,
+      # autolink: true,
+    )
+    html = @formatter.render(markdown_text)
     return html
   end
 
@@ -190,7 +200,7 @@ EOS
     end
     html = build_html(body)
     content = HEADER +
-      html.gsub(/ class=\".*?\"/, "").gsub(/<(br|hr).*?>/, "\\&</\\1>") +
+      html.gsub(/ class=\".*?\"/, "").gsub(/<(br|hr|img).*?>/, "\\&</\\1>") +
       FOOTER
     o = options.merge(title: title, content: content, tagNames: tags)
     return Evernote::EDAM::Type::Note.new(o)
