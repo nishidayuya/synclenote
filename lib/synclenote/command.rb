@@ -161,14 +161,16 @@ EOS
     return 4 # 4 sec for sandbox
   end
 
-  def pipeline
-    return @pipeline ||=
+  def build_html(markdown_text)
+    @pipeline ||=
       ::HTML::Pipeline.new([
                              ::HTML::Pipeline::MarkdownFilter,
                              ::HTML::Pipeline::SanitizationFilter,
                              ::HTML::Pipeline::SyntaxHighlightFilter,
                              # ::HTML::Pipeline::PlainTextInputFilter,
-                         ])
+                           ])
+    html = @pipeline.call(markdown_text, gfm: true)[:output].to_s
+    return html
   end
 
   def create_note(note_path, options = {})
@@ -183,7 +185,7 @@ EOS
       end
       body = f.read
     end
-    html = pipeline.call(body, gfm: true)[:output].to_s
+    html = build_html(body)
     content = HEADER +
       html.gsub(/ class=\".*?\"/, "").gsub(/<(br|hr).*?>/, "\\&</\\1>") +
       FOOTER
