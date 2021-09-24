@@ -113,6 +113,9 @@ EOS
       end
 
       logger.debug("nothing: %s" % note_path)
+    rescue Evernote::EDAM::Error::EDAMUserException => e
+      logger.error(e.inspect)
+      raise
     end
 
     # remove note
