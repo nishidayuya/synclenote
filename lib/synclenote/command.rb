@@ -3,10 +3,11 @@ require "synclenote"
 require "yaml"
 require "pathname"
 require "logger"
+require "tempfile"
 
 require "thor"
 require "evernote_oauth"
-require "html/pipeline"
+require "redcarpet"
 
 class Synclenote::Command < Thor
   attr_accessor :logger
@@ -113,6 +114,9 @@ EOS
       end
 
       logger.debug("nothing: %s" % note_path)
+    rescue Evernote::EDAM::Error::EDAMUserException => e
+      logger.error(e.inspect)
+      raise
     end
 
     # remove note
@@ -161,14 +165,25 @@ EOS
     return 4 # 4 sec for sandbox
   end
 
-  def pipeline
-    return @pipeline ||=
-      ::HTML::Pipeline.new([
-                             ::HTML::Pipeline::MarkdownFilter,
-                             ::HTML::Pipeline::SanitizationFilter,
-                             ::HTML::Pipeline::SyntaxHighlightFilter,
-                             # ::HTML::Pipeline::PlainTextInputFilter,
-                         ])
+  def build_html(markdown_text)
+    @formatter ||= Redcarpet::Markdown.new(
+      Redcarpet::Render::HTML.new(
+        filter_html: true,
+        hard_wrap: true,
+      ),
+      underline: true,
+      lax_spacing: true,
+      footnotes: true,
+      no_intra_emphasis: true,
+      superscript: true,
+      strikethrough: true,
+      tables: true,
+      space_after_headers: true,
+      fenced_code_blocks: true,
+      # autolink: true,
+    )
+    html = @formatter.render(markdown_text)
+    return html
   end
 
   def create_note(note_path, options = {})
@@ -183,9 +198,9 @@ EOS
       end
       body = f.read
     end
-    html = pipeline.call(body, gfm: true)[:output].to_s
+    html = build_html(body)
     content = HEADER +
-      html.gsub(/ class=\".*?\"/, "").gsub(/<(br|hr).*?>/, "\\&</\\1>") +
+      html.gsub(/ class=\".*?\"/, "").gsub(/<(br|hr|img).*?>/, "\\&</\\1>") +
       FOOTER
     o = options.merge(title: title, content: content, tagNames: tags)
     return Evernote::EDAM::Type::Note.new(o)
