@@ -3,34 +3,37 @@
 A synchronization tool for GFM (GitHub Flavored Markdown) files and Evernote.
 
 [![License X11](https://img.shields.io/badge/license-X11-brightgreen.svg)](https://raw.githubusercontent.com/nishidayuya/synclenote/master/LICENSE.txt)
-[![Dependency Status](https://gemnasium.com/nishidayuya/synclenote.svg)](https://gemnasium.com/nishidayuya/synclenote)
 [![Build Status](https://travis-ci.org/nishidayuya/synclenote.svg?branch=master)](https://travis-ci.org/nishidayuya/synclenote)
+
+## Requirements
+
+- Ruby
 
 ## Installation
 
-1. Install Ruby interpreter.
-2. Clone and install this software.
-```sh
-$ git clone https://github.com/nishidayuya/synclenote.git
-$ cd synclenote
-$ bundle exec rake install
+```console
+$ gem install synclenote
 ```
 
 ## Usage
 
-1. Create configuration directory.
-```sh
+Create configuration directory:
+
+```console
 $ synclenote init
 ```
-2. Open "~/.synclenote/config" by your favorite text editor and edit "TODO:" section.
-3. Sync your GFM files and Evernote.
-```sh
+
+Open "~/.synclenote/config" by your favorite text editor and edit "TODO:" section.
+
+Sync your GFM files and Evernote:
+
+```console
 $ synclenote sync
 ```
 
 ## Contributing
 
-1. Fork it ( https://github.com/[my-github-username]/synclenote/fork )
+1. Fork it ( https://github.com/nishidayuya/synclenote/fork )
 2. Create your feature branch (`git checkout -b my-new-feature`)
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
