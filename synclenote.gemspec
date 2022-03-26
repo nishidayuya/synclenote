@@ -23,5 +23,6 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency "evernote_oauth"
   spec.add_runtime_dependency "redcarpet"
   spec.add_development_dependency "bundler"
+  spec.add_development_dependency "debug"
   spec.add_development_dependency "rake"
 end
