@@ -1,6 +1,10 @@
 # coding: utf-8
-lib = File.expand_path('../lib', __FILE__)
-$LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
+
+require "pathname"
+
+top_path = Pathname(__dir__).expand_path
+lib_path = top_path / "lib"
+$LOAD_PATH.unshift(lib_path)
 require 'synclenote/version'
 
 Gem::Specification.new do |spec|
