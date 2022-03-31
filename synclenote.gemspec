@@ -12,8 +12,8 @@ Gem::Specification.new do |spec|
   spec.version       = Synclenote::VERSION
   spec.authors       = ["Yuya.Nishida."]
   spec.email         = ["yuya@j96.org"]
-  spec.summary       = File.readlines(File.join(__dir__, "README.md"))
-    .reject { |l| /\A\s*\z|\A\#/ === l }.first.chomp
+  spec.summary = (top_path / "README.md").each_line(chomp: true).lazy.
+                   grep_v(/\A\s*\z|\A\#/).first
   spec.description   = spec.summary
   spec.homepage      = "https://github.com/nishidayuya/" + spec.name
   spec.license       = "X11"
