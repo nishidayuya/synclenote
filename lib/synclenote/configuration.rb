@@ -1,5 +1,3 @@
-require "synclenote"
-
 require "ostruct"
 
 module Synclenote::Configuration
