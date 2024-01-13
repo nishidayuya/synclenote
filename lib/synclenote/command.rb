@@ -89,7 +89,7 @@ EOS
     logger.debug("loaded note_store.")
 
     local_top_path = Pathname(c.local.directory).expand_path
-    last_sync_status = YAML.load_file(last_sync_path)
+    last_sync_status = load_yaml_path(last_sync_path)
     last_sync_datetime = last_sync_status[:last_sync_datetime]
     if Time.now - last_sync_datetime <= min_sync_interval
       allowed_sync_time = last_sync_datetime + min_sync_interval
@@ -109,7 +109,7 @@ EOS
       end
 
       # update note
-      note_sync_status = YAML.load_file(note_sync_status_path)
+      note_sync_status = load_yaml_path(note_sync_status_path)
       if note_sync_status[:last_sync_datetime] < note_path.mtime
         update_remote_note(token, note_store, note_path, note_sync_status_path,
                            note_sync_status[:guid])
@@ -146,6 +146,19 @@ EOS
   FOOTER = <<EOS.freeze
 </en-note>
 EOS
+
+  def load_yaml_path(path)
+    return YAML.safe_load(
+             path.read,
+             permitted_classes: [
+               Symbol,
+               Time,
+             ],
+             symbolize_names: true,
+             filename: path,
+             freeze: true,
+           )
+  end
 
   def profile_path
     return @profile_path ||= Pathname("~/.synclenote").expand_path
@@ -267,7 +280,7 @@ EOS
   end
 
   def remove_remote_note(token, note_store, note_sync_status_path)
-    note_sync_status = YAML.load_file(note_sync_status_path)
+    note_sync_status = load_yaml_path(note_sync_status_path)
     guid = note_sync_status[:guid]
     logger.debug("doing deleteNote: %s" % guid)
     note_store.deleteNote(token, guid)
