@@ -248,7 +248,7 @@ EOS
                     }.to_yaml)
       tmp_file.close
       path.parent.mkpath
-      FileUtils.mv(tmp_file.path, path)
+      FileUtils.mv(tmp_file.path, path) if !Synclenote::DRY_RUN
     end
   end
 
@@ -260,7 +260,12 @@ EOS
       return
     end
     logger.debug("doing createNote: %s" % note_path)
-    created_note = note_store.createNote(token, new_note)
+    created_note =
+      if Synclenote::DRY_RUN
+        Evernote::EDAM::Type::Note.new(guid: "created_note_dummy_guid")
+      else
+        note_store.createNote(token, new_note)
+      end
     logger.debug("done createNote.")
     create_note_sync_status_file(note_sync_status_path, created_note,
                                  Time.now)
@@ -276,7 +281,12 @@ EOS
       return
     end
     logger.debug("doing updateNote: %s %s" % [note_path, guid])
-    updated_note = note_store.updateNote(token, new_note)
+    updated_note =
+      if Synclenote::DRY_RUN
+        Evernote::EDAM::Type::Note.new(guid: "updated_note_dummy_guid")
+      else
+        note_store.updateNote(token, new_note)
+      end
     logger.debug("done updateNote.")
     create_note_sync_status_file(note_sync_status_path, updated_note, Time.now)
     logger.debug("created: %s" % note_sync_status_path)
@@ -286,10 +296,10 @@ EOS
     note_sync_status = load_yaml_path(note_sync_status_path)
     guid = note_sync_status[:guid]
     logger.debug("doing deleteNote: %s" % guid)
-    note_store.deleteNote(token, guid)
+    note_store.deleteNote(token, guid) if !Synclenote::DRY_RUN
     logger.debug("done deleteNote.")
 
-    note_sync_status_path.delete
+    note_sync_status_path.delete if !Synclenote::DRY_RUN
     logger.debug("removed: %s" % note_sync_status_path)
   end
 end
