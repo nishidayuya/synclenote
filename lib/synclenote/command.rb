@@ -147,6 +147,8 @@ EOS
 </en-note>
 EOS
 
+  TITLE_IF_EMPTY = "no title"
+
   def load_yaml_path(path)
     return YAML.safe_load(
              path.read,
@@ -218,6 +220,7 @@ EOS
     content = HEADER +
       html.gsub(/ class=\".*?\"/, "").gsub(/<(br|hr|img).*?>/, "\\&</\\1>") +
       FOOTER
+    title = TITLE_IF_EMPTY if /\A\s*\z/ === title
     o = options.merge(title: title, content: content, tagNames: tags)
     return Evernote::EDAM::Type::Note.new(o)
   end
