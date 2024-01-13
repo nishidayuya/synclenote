@@ -6,8 +6,11 @@ require "logger"
 require "tempfile"
 
 require "thor"
-require "evernote_oauth"
 require "redcarpet"
+
+require "evernote_oauth"
+# workaround https://github.com/Evernote/evernote-sdk-ruby/pull/23
+Fixnum = Integer if !defined?(Fixnum)
 
 class Synclenote::Command < Thor
   attr_accessor :logger
