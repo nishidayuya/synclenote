@@ -1,5 +1,3 @@
-require "synclenote"
-
 require "yaml"
 require "pathname"
 require "logger"
@@ -137,18 +135,6 @@ EOS
 
 EOS
 
-  HEADER = <<EOS.freeze
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE en-note SYSTEM "http://xml.evernote.com/pub/enml2.dtd">
-<en-note>
-EOS
-
-  FOOTER = <<EOS.freeze
-</en-note>
-EOS
-
-  TITLE_IF_EMPTY = "no title"
-
   def load_yaml_path(path)
     return YAML.safe_load(
              path.read,
@@ -183,46 +169,8 @@ EOS
     return 4 # 4 sec for sandbox
   end
 
-  def build_html(markdown_text)
-    @formatter ||= Redcarpet::Markdown.new(
-      Redcarpet::Render::HTML.new(
-        filter_html: true,
-        hard_wrap: true,
-      ),
-      underline: true,
-      lax_spacing: true,
-      footnotes: true,
-      no_intra_emphasis: true,
-      superscript: true,
-      strikethrough: true,
-      tables: true,
-      space_after_headers: true,
-      fenced_code_blocks: true,
-      # autolink: true,
-    )
-    html = @formatter.render(markdown_text)
-    return html
-  end
-
-  def create_note(note_path, options = {})
-    title = nil
-    tags = ["syncle"]
-    body = nil
-    note_path.open do |f|
-      title = f.gets.chomp.sub(/\A#\s*/, "")
-      if md = /\A(?<tags>(?:\[.*?\])+)(?:\s|\z)/.match(title)
-        tags += md[:tags].scan(/\[(.*?)\]/).flatten
-        title = md.post_match
-      end
-      body = f.read
-    end
-    html = build_html(body)
-    content = HEADER +
-      html.gsub(/ class=\".*?\"/, "").gsub(/<(br|hr|img).*?>/, "\\&</\\1>") +
-      FOOTER
-    title = TITLE_IF_EMPTY if /\A\s*\z/ === title
-    o = options.merge(title: title, content: content, tagNames: tags)
-    return Evernote::EDAM::Type::Note.new(o)
+  def create_note(note_path, **options)
+    return Synclenote::NoteBuilder.(note_path, **options)
   end
 
   def target_note?(note)
