@@ -34,6 +34,15 @@ class Synclenote::MarkdownToEnmlBuilderTest < Test::Unit::TestCase
           def</p>
         EOS
       },
+      hyperlink: {
+        markdown_text: <<~EOS,
+          [link text](https://example.org/?foo=bar&baz=quux;hoge=fuga#anchor)
+        EOS
+        # convert "&" to "&amp;"
+        expected_enml_text: <<~EOS,
+          <p><a href="https://example.org/?foo=bar&amp;baz=quux;hoge=fuga#anchor">link text</a></p>
+        EOS
+      },
     )
     test("returns ENML String") do |h|
       assert_equal(
