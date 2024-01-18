@@ -32,13 +32,18 @@ class Synclenote::MarkdownToEnmlBuilder
       )
       html = formatter.render(markdown_text)
       root = Nokogiri::HTML::DocumentFragment.parse(html)
+
+      root.css("*[class]").each do |node|
+        node.remove_attribute("class")
+      end
+
       # '<a href="example.html?foo=bar&baz=quux">'
       # =>
       # '<a href="example.html?foo=bar&amp;baz=quux">'
       treated_html = root.to_html
       content = [
         HEADER,
-        treated_html.gsub(/ class=\".*?\"/, "").gsub(/<(br|hr|img).*?>/, "\\&</\\1>"),
+        treated_html.gsub(/<(br|hr|img).*?>/, "\\&</\\1>"),
         FOOTER,
       ].join
       return content
