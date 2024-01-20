@@ -50,7 +50,15 @@ jobs:
           bundle config path vendor/bundle
           bundle install --jobs "${{ steps.system-info.outputs.cpu-core }}" --retry 3
       - name: Run tests
-        run: bundle exec rake
+        run: bundle exec rake test
+      - name: Run command help
+        shell: bash
+        run: |
+          set -eux -o pipefail
+          version=$(ruby -r./lib/synclenote/version -e 'puts(Synclenote::VERSION)')
+          bundle exec rake build
+          gem install pkg/synclenote-$version.gem
+          synclenote help
       - name: Output versions
         if: always()
         shell: bash
