@@ -1,3 +1,5 @@
+require "pathname"
+
 # This module is a namespace for this gem.
 module Synclenote
   DRY_RUN = false
