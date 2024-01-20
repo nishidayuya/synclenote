@@ -45,7 +45,7 @@ jobs:
       - name: Install dependencies
         shell: bash
         run: |
-          set -eux
+          set -eux -o pipefail
           gem update --system
           bundle config path vendor/bundle
           bundle install --jobs "${{ steps.system-info.outputs.cpu-core }}" --retry 3
@@ -55,7 +55,7 @@ jobs:
         if: always()
         shell: bash
         run: |
-          set -eux
+          set -eux -o pipefail
           run_if_exist() {
             if test "x$(which $1)" != "x"
             then
