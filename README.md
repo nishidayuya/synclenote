@@ -2,8 +2,9 @@
 
 A synchronization tool for GFM (GitHub Flavored Markdown) files and Evernote.
 
-[![License X11](https://img.shields.io/badge/license-X11-brightgreen.svg)](https://raw.githubusercontent.com/nishidayuya/synclenote/master/LICENSE.txt)
-[![Build Status](https://travis-ci.org/nishidayuya/synclenote.svg?branch=master)](https://travis-ci.org/nishidayuya/synclenote)
+[![License X11](https://img.shields.io/badge/license-X11-blue.svg)](https://raw.githubusercontent.com/nishidayuya/synclenote/master/LICENSE.txt)
+[![Gem Version](https://badge.fury.io/rb/synclenote.svg)](https://rubygems.org/gems/synclenote)
+[![Build Status](https://github.com/nishidayuya/synclenote/workflows/test/badge.svg)](https://github.com/nishidayuya/synclenote/actions?query=workflow%3Atest)
 
 ## Requirements
 
